@@ -6,7 +6,7 @@ Rust Bindings for Termux GUI
 - Rust Stable(1.62)
 
 ## How to Use
-For the time being, please refer the tests and examples and source code.
+For the time being, please refer the tests, examples and source code.
 I will add docs later.
 
 
