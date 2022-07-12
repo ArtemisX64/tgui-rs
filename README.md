@@ -1,6 +1,7 @@
 # Tgui-rs
 Rust Bindings for Termux GUI
 
+
 ## Setup
 - Termux GUI //Due to signing issues in Fdroid, please refer [Termux GUI Installation Instructions](https://github.com/termux/termux-gui)
 - Rust Stable(1.62)
@@ -31,3 +32,7 @@ I will add docs later.
 ## Notes
 - Currently the project is in alpha stage. So expect missing features and bugs.
 If you like, you can also support me.
+
+## Social Groups
+- [Discord](https://discord.gg/sZXmbF4xFs)
+- [Telegram](https://t.me/+ZCDWMwsW6pQ0ZWE1)
