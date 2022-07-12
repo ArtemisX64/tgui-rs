@@ -1,4 +1,4 @@
-# tgui-rs
+# Tgui-rs
 Rust Bindings for Termux GUI
 
 ## Setup
