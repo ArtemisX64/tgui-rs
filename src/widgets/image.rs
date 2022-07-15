@@ -1,16 +1,16 @@
 use super::RawFd;
-use super::{construct_message, send_msg, send_recv_msg, View};
+use super::{construct_message, send_recv_msg, View};
 use serde_json::json;
 use std::io::Cursor;
 
 pub struct ImageView<'a> {
     id: i32,
     aid: &'a str,
-    sock: RawFd,
+    sock: &'a RawFd,
 }
 
 impl<'a> ImageView<'a> {
-    pub fn new(fd: RawFd, aid: &'a str, parent: Option<i32>) -> Self {
+    pub fn new(fd: &'a RawFd, aid: &'a str, parent: Option<i32>) -> Self {
         let mut args = json!({ "aid": aid });
 
         if let Some(id) = parent {
@@ -34,7 +34,7 @@ impl<'a> ImageView<'a> {
             "id": self.id,
             "img": res_base64
         });
-        send_msg(self.sock, construct_message("setImage", &args));
+        self.send_msg(construct_message("setImage", &args));
     }
 }
 
@@ -47,7 +47,7 @@ impl<'a> View for ImageView<'a> {
         self.aid
     }
 
-    fn get_sock(&self) -> RawFd {
+    fn get_sock(&self) -> &RawFd {
         self.sock
     }
 }

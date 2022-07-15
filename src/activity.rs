@@ -8,7 +8,7 @@ pub struct Activity {
 }
 
 impl Activity {
-    pub fn new(main: RawFd, tid: Option<i32>, flags: AF) -> Self {
+    pub fn new(main: &RawFd, tid: Option<i32>, flags: AF) -> Self {
         let mut args = json!({
             "dialog": flags.contains(AF::DIALOG),
             "pip": flags.contains(AF::PIP),
@@ -39,10 +39,19 @@ impl Activity {
         Activity { tid: new_tid, aid }
     }
 
-    pub fn finish(&self, main: RawFd) {
+    pub fn finish(&self, main: &RawFd) {
         let args = json!({
             "aid": &self.aid
         });
         send_msg(main, construct_message("finishActivity", &args));
+    }
+
+    pub fn set_input_mode(&self, main: &RawFd, mode: &str) {
+        let args = json!({
+            "aid": &self.aid,
+            "mode": mode
+        });
+
+        send_msg(main, construct_message("setInputMode", &args));
     }
 }

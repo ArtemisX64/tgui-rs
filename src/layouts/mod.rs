@@ -1,4 +1,4 @@
-use super::connection::{construct_message, send_msg, send_recv_msg};
+use super::connection::{construct_message, send_recv_msg};
 use super::{RawFd, View};
 use serde_json::json;
 
@@ -11,6 +11,6 @@ pub trait ViewGroup: View {
             "id": self.get_id()
         });
 
-        send_msg(self.get_sock(), construct_message("deleteChildren", &args));
+        self.send_msg(construct_message("deleteChildren", &args));
     }
 }

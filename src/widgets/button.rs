@@ -6,11 +6,11 @@ use serde_json::json;
 pub struct Button<'a> {
     id: i32,
     aid: &'a str,
-    sock: RawFd,
+    sock: &'a RawFd,
 }
 
 impl<'a> Button<'a> {
-    pub fn new(fd: RawFd, aid: &'a str, text: &str, parent: Option<i32>) -> Self {
+    pub fn new(fd: &'a RawFd, aid: &'a str, parent: Option<i32>, text: &str) -> Self {
         let mut args = json!({
             "aid": aid,
             "text": text,
@@ -37,7 +37,7 @@ impl<'a> View for Button<'a> {
         self.aid
     }
 
-    fn get_sock(&self) -> RawFd {
+    fn get_sock(&self) -> &RawFd {
         self.sock
     }
 }

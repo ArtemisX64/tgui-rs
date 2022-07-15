@@ -11,20 +11,20 @@ fn main() {
     let ui = tgui.ui(None, flags);
     let layout = ui.linear_layout(None, true);
 
-    let title = ui.label("Download Video", Some(&layout), false, false);
+    let title = ui.label(Some(&layout), "Download Video", false, false);
     title.set_text_size(30);
 
     title.set_margin(5, None);
 
-    ui.label("Video Link", Some(&layout), false, false);
-    ui.edit_text("", Some(&layout), false, false, false, "text");
+    ui.label(Some(&layout), "Video Link", false, false);
+    ui.edit_text(Some(&layout), "", false, false, false, "text");
 
-    ui.label("File Name", Some(&layout), false, false);
-    ui.edit_text("", Some(&layout), false, false, false, "text");
+    ui.label(Some(&layout), "File Name", false, false);
+    ui.edit_text(Some(&layout), "", false, false, false, "text");
 
     let buttons = ui.linear_layout(Some(&layout), false);
-    ui.button("Download", Some(&buttons));
-    let cancel = ui.button("Cancel", Some(&buttons));
+    ui.button(Some(&buttons), "Download");
+    let cancel = ui.button(Some(&buttons), "Cancel");
 
     loop {
         let event = tgui.event();

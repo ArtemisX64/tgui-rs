@@ -4,13 +4,13 @@ use super::widgets::{button::Button, edit_text::EditText, image::ImageView, labe
 use super::RawFd;
 use super::AF;
 
-pub struct Ui {
+pub struct Ui<'a> {
     activity: Activity,
-    main: RawFd,
+    main: &'a RawFd,
 }
 
-impl Ui {
-    pub fn new(main: RawFd, tid: Option<i32>, flags: AF) -> Self {
+impl<'a> Ui<'a> {
+    pub fn new(main: &'a RawFd, tid: Option<i32>, flags: AF) -> Self {
         Ui {
             activity: Activity::new(main, tid, flags),
             main,
@@ -19,8 +19,8 @@ impl Ui {
 
     pub fn label(
         &self,
-        text: &str,
         parent: Option<&dyn View>,
+        text: &str,
         selectable_text: bool,
         clickable_links: bool,
     ) -> Label {
@@ -31,11 +31,15 @@ impl Ui {
         Label::new(
             self.main,
             &self.activity.aid,
-            text,
             parent,
+            text,
             selectable_text,
             clickable_links,
         )
+    }
+
+    pub fn default_label(&self, parent: Option<&dyn View>, text: &str) -> Label {
+        self.label(parent, text, false, false)
     }
 
     pub fn image_view(&self, parent: Option<&dyn View>) -> ImageView {
@@ -45,18 +49,18 @@ impl Ui {
         };
         ImageView::new(self.main, &self.activity.aid, parent)
     }
-    pub fn button(&self, text: &str, parent: Option<&dyn View>) -> Button {
+    pub fn button(&self, parent: Option<&dyn View>, text: &str) -> Button {
         let parent: Option<i32> = match parent {
             Some(parent) => Some(parent.get_id()),
             None => None,
         };
-        Button::new(self.main, &self.activity.aid, text, parent)
+        Button::new(self.main, &self.activity.aid, parent, text)
     }
 
     pub fn edit_text(
         &self,
-        text: &str,
         parent: Option<&dyn View>,
+        text: &str,
         single_line: bool,
         line: bool,
         block_input: bool,
@@ -69,14 +73,19 @@ impl Ui {
         EditText::new(
             self.main,
             &self.activity.aid,
-            text,
             parent,
+            text,
             single_line,
             line,
             block_input,
             ty,
         )
     }
+
+    pub fn default_edit_text(&self, parent: Option<&dyn View>, text: &str) -> EditText {
+        self.edit_text(parent, text, false, true, false, "text")
+    }
+
     pub fn linear_layout(&self, parent: Option<&dyn View>, vertical: bool) -> LinearLayout {
         let parent: Option<i32> = match parent {
             Some(parent) => Some(parent.get_id()),

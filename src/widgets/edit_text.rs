@@ -1,20 +1,20 @@
 use super::label::TextView;
 use super::RawFd;
-use super::{construct_message, send_msg, send_recv_msg, View};
+use super::{construct_message, send_recv_msg, View};
 use serde_json::json;
 
 pub struct EditText<'a> {
     id: i32,
     aid: &'a str,
-    sock: RawFd,
+    sock: &'a RawFd,
 }
 
 impl<'a> EditText<'a> {
     pub fn new(
-        fd: RawFd,
+        fd: &'a RawFd,
         aid: &'a str,
-        text: &str,
         parent: Option<i32>,
+        text: &str,
         single_line: bool,
         line: bool,
         block_input: bool,
@@ -45,7 +45,7 @@ impl<'a> EditText<'a> {
             "show": show
 
         });
-        send_msg(self.sock, construct_message("showCursor", &args));
+        self.send_msg(construct_message("showCursor", &args));
     }
 }
 
@@ -60,7 +60,7 @@ impl<'a> View for EditText<'a> {
         self.aid
     }
 
-    fn get_sock(&self) -> RawFd {
+    fn get_sock(&self) -> &RawFd {
         self.sock
     }
 }

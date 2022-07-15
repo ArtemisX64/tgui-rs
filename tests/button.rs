@@ -7,7 +7,7 @@ use tgui::AF;
 fn button() {
     let tgui = TGui::new();
     let ui = tgui.ui(None, AF::empty());
-    ui.button("Hello", None);
+    ui.button(None, "Hello");
     std::thread::sleep(std::time::Duration::from_secs(5));
 }
 
@@ -15,7 +15,7 @@ fn button() {
 fn change_color() {
     let tgui = TGui::new();
     let ui = tgui.ui(None, AF::empty());
-    let button = ui.button("Hey", None);
+    let button = ui.button(None, "Hey");
     button.set_background_color(Color::from_rgb(198, 120, 236));
 
     std::thread::sleep(std::time::Duration::from_secs(5));

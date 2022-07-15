@@ -5,6 +5,6 @@ use tgui::AF;
 fn edit_text() {
     let tgui = TGui::new();
     let ui = tgui.ui(None, AF::empty());
-    let _et = ui.edit_text("", None, false, true, false, "text");
+    ui.default_edit_text(None, "");
     std::thread::sleep(std::time::Duration::from_secs(5));
 }

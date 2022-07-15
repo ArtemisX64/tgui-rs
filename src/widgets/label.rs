@@ -1,19 +1,19 @@
 use super::RawFd;
-use super::{construct_message, send_msg, send_recv_msg, Color, View};
+use super::{construct_message, send_recv_msg, Color, View};
 use serde_json::json;
 
 pub struct Label<'a> {
     id: i32,
     aid: &'a str,
-    sock: RawFd,
+    sock: &'a RawFd,
 }
 
 impl<'a> Label<'a> {
     pub fn new(
-        fd: RawFd,
+        fd: &'a RawFd,
         aid: &'a str,
-        text: &str,
         parent: Option<i32>,
+        text: &str,
         selectable_text: bool,
         clickable_links: bool,
     ) -> Self {
@@ -42,7 +42,7 @@ pub trait TextView: View {
             "size": size
         });
 
-        send_msg(self.get_sock(), construct_message("setTextSize", &args));
+        self.send_msg(construct_message("setTextSize", &args));
     }
 
     fn set_text(&self, text: &str) {
@@ -52,7 +52,7 @@ pub trait TextView: View {
             "text": text
         });
 
-        send_msg(self.get_sock(), construct_message("setText", &args));
+        self.send_msg(construct_message("setText", &args));
     }
 
     fn get_text(&self) -> String {
@@ -61,7 +61,8 @@ pub trait TextView: View {
             "id": self.get_id()
         });
 
-        send_recv_msg(self.get_sock(), construct_message("getText", &args)).to_string()
+        self.send_recv_msg(construct_message("getText", &args))
+            .to_string()
     }
 
     fn set_text_color(&self, color: Color) {
@@ -71,7 +72,7 @@ pub trait TextView: View {
             "color": color.to_u32()
         });
 
-        send_msg(self.get_sock(), construct_message("setTextColor", &args));
+        self.send_msg(construct_message("setTextColor", &args));
     }
 
     fn set_text_event(&self, send: bool) {
@@ -81,7 +82,7 @@ pub trait TextView: View {
             "send": send
         });
 
-        send_msg(self.get_sock(), construct_message("setTextEvent", &args));
+        self.send_msg(construct_message("setTextEvent", &args));
     }
 }
 
@@ -96,7 +97,7 @@ impl<'a> View for Label<'a> {
         self.aid
     }
 
-    fn get_sock(&self) -> RawFd {
+    fn get_sock(&self) -> &RawFd {
         self.sock
     }
 }

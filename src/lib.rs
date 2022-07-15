@@ -34,15 +34,15 @@ impl TGui {
     }
 
     pub fn activity(&self, tid: Option<i32>, flags: AF) -> activity::Activity {
-        activity::Activity::new(self.main, tid, flags)
+        activity::Activity::new(&self.main, tid, flags)
     }
 
     pub fn ui(&self, tid: Option<i32>, flags: AF) -> ui::Ui {
-        ui::Ui::new(self.main, tid, flags)
+        ui::Ui::new(&self.main, tid, flags)
     }
 
     pub fn event(&self) -> event::Event {
-        let event = connection::recv_msg(self.event);
+        let event = connection::recv_msg(&self.event);
         event::Event::new(event)
     }
 
@@ -51,19 +51,19 @@ impl TGui {
             "text": text,
             "long": long
         });
-        connection::send_msg(self.main, connection::construct_message("toast", &args));
+        connection::send_msg(&self.main, connection::construct_message("toast", &args));
     }
 
     pub fn turn_screen_on(&self) {
         connection::send_msg(
-            self.main,
+            &self.main,
             connection::construct_message("turnScreenOn", &json!(null)),
         );
     }
 
     pub fn is_locked(&self) -> bool {
         connection::send_recv_msg(
-            self.main,
+            &self.main,
             connection::construct_message("isLocked", &json!(null)),
         )
         .to_string()

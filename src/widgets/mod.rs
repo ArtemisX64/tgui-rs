@@ -11,14 +11,21 @@ pub mod label;
 pub trait View {
     fn get_id(&self) -> i32;
     fn get_aid(&self) -> &str;
-    fn get_sock(&self) -> RawFd;
+    fn get_sock(&self) -> &RawFd;
+
+    fn send_recv_msg(&self, msg: serde_json::Value) -> serde_json::Value {
+        send_recv_msg(self.get_sock(), msg)
+    }
+    fn send_msg(&self, msg: serde_json::Value) {
+        send_msg(self.get_sock(), msg);
+    }
 
     fn delete(&self) {
         let args = json!({
             "aid": self.get_aid(),
             "id": self.get_id()
         });
-        send_msg(self.get_sock(), construct_message("deleteView", &args));
+        self.send_msg(construct_message("deleteView", &args));
     }
 
     fn set_margin(&self, margin: i32, dir: Option<&str>) {
@@ -32,7 +39,7 @@ pub trait View {
             args["dir"] = json!(val);
         }
 
-        send_msg(self.get_sock(), construct_message("setMargin", &args));
+        self.send_msg(construct_message("setMargin", &args));
     }
 
     fn set_width(&self, width: u16, px: bool) {
@@ -43,7 +50,7 @@ pub trait View {
             "px": px
         });
 
-        send_msg(self.get_sock(), construct_message("setWidth", &args));
+        self.send_msg(construct_message("setWidth", &args));
     }
 
     fn set_height(&self, height: u16, px: bool) {
@@ -54,7 +61,7 @@ pub trait View {
             "px": px
         });
 
-        send_msg(self.get_sock(), construct_message("setHeight", &args));
+        self.send_msg(construct_message("setHeight", &args));
     }
 
     fn set_dimensions(&self, dimensions: Vec2<u16>, px: bool) {
@@ -69,10 +76,7 @@ pub trait View {
             "weight": weight
         });
 
-        send_msg(
-            self.get_sock(),
-            construct_message("setLinearLayoutParams", &args),
-        );
+        self.send_msg(construct_message("setLinearLayoutParams", &args));
     }
 
     fn send_touch_event(&self, send: bool) {
@@ -82,7 +86,7 @@ pub trait View {
             "send": send
         });
 
-        send_msg(self.get_sock(), construct_message("sendTouchEvent", &args));
+        self.send_msg(construct_message("sendTouchEvent", &args));
     }
 
     fn send_click_event(&self, send: bool) {
@@ -92,7 +96,7 @@ pub trait View {
             "send": send
         });
 
-        send_msg(self.get_sock(), construct_message("sendClickEvent", &args));
+        self.send_msg(construct_message("sendClickEvent", &args));
     }
 
     fn send_long_click_event(&self, send: bool) {
@@ -102,10 +106,7 @@ pub trait View {
             "send": send
         });
 
-        send_msg(
-            self.get_sock(),
-            construct_message("sendLongClickEvent", &args),
-        );
+        self.send_msg(construct_message("sendLongClickEvent", &args));
     }
 
     fn send_focus_change_event(&self, send: bool) {
@@ -115,10 +116,7 @@ pub trait View {
             "send": send
         });
 
-        send_msg(
-            self.get_sock(),
-            construct_message("sendFocusChangeEvent", &args),
-        );
+        self.send_msg(construct_message("sendFocusChangeEvent", &args));
     }
 
     fn get_dimensions(&self) -> Vec2<u16> {
@@ -127,7 +125,7 @@ pub trait View {
             "id": self.get_id()
         });
 
-        let ret = send_recv_msg(self.get_sock(), construct_message("getDimensions", &args));
+        let ret = self.send_recv_msg(construct_message("getDimensions", &args));
         Vec2 {
             x: ret[0].to_string().parse().unwrap(),
             y: ret[1].to_string().parse().unwrap(),
@@ -141,10 +139,7 @@ pub trait View {
             "color": color.to_u32()
         });
 
-        send_msg(
-            self.get_sock(),
-            construct_message("setBackgroundColor", &args),
-        );
+        self.send_msg(construct_message("setBackgroundColor", &args));
     }
 
     fn set_visibility(&self, vis: u8) {
@@ -154,7 +149,7 @@ pub trait View {
             "vis": vis
         });
 
-        send_msg(self.get_sock(), construct_message("setVisibility", &args));
+        self.send_msg(construct_message("setVisibility", &args));
     }
 
     fn focus(&self, force_soft: bool) {
@@ -164,6 +159,6 @@ pub trait View {
             "forceSoft": force_soft
         });
 
-        send_msg(self.get_sock(), construct_message("requestFocus", &args));
+        self.send_msg(construct_message("requestFocus", &args));
     }
 }
