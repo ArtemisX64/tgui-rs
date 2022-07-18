@@ -1,12 +1,21 @@
 use super::connection::{construct_message, send_msg, send_recv_msg};
+use super::event::Event;
 use super::utils::{Color, Vec2};
 use super::RawFd;
 use serde_json::json;
 
 pub mod button;
+pub mod check_box;
+pub mod compound_button;
 pub mod edit_text;
 pub mod image;
 pub mod label;
+pub mod progress_bar;
+pub mod radio_button;
+pub mod space;
+pub mod spinner;
+pub mod switch;
+pub mod toggle_button;
 
 pub trait View {
     fn get_id(&self) -> i32;

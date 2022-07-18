@@ -17,16 +17,16 @@ I will add docs later.
 - [x] ImageView
 - [x] Button
 - [x] Linear Layout
-- [ ] Toggle Button
-- [ ] Radio Button
+- [x] Toggle Button
+- [x] Radio Button
 - [ ] Buffer
-- [ ] Spinner
-- [ ] Switch
-- [ ] TabLayout
-- [ ] ProgressBar
-- [ ] HorizontalScrollView
-- [ ] NestedScrollView
-- [ ] Swipe Refresh Layout
+- [x] Spinner
+- [x] Switch
+- [x] TabLayout
+- [x] ProgressBar
+- [x] HorizontalScrollView
+- [x] NestedScrollView
+- [x] Swipe Refresh Layout
 - [ ] Better Documentation
 
 ## Notes
