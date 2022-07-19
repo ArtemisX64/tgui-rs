@@ -1,0 +1,26 @@
+[package]
+name = "c8"
+version = "0.5.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sdl2 = "0.34.5"
+gl = "0.14.0"
+nalgebra-glm = "0.15.0"
+rand = "0.8.4"
+rust-ini = "0.17"
+tgui-rs = {path = "../.."}
+
+[lib]
+name = "chip8"
+path = "src/chip8.rs"
+
+[[bin]]
+name = "c8"
+path = "src/frontend/c8_cli.rs"
+
+[[bin]]
+name = "c8_tgui"
+path = "src/frontend/c8_tgui.rs"

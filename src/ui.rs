@@ -1,4 +1,5 @@
 use super::activity::Activity;
+pub use super::layouts::ViewGroup;
 use super::layouts::{
     frame_layout::FrameLayout, horizontal_scroll_view::HorizontalScrollView,
     linear_layout::LinearLayout, nested_scroll_view::NestedScrollView, radio_group::RadioGroup,
@@ -7,14 +8,15 @@ use super::layouts::{
 use super::widgets::{
     button::Button, check_box::CheckBox, edit_text::EditText, image::ImageView, label::Label,
     progress_bar::ProgressBar, radio_button::RadioButton, space::Space, spinner::Spinner,
-    switch::Switch, toggle_button::ToggleButton, View,
+    switch::Switch, toggle_button::ToggleButton,
 };
+pub use super::widgets::{compound_button::CompoundButton, label::TextView, View};
 use super::RawFd;
 use super::AF;
 
 pub struct Ui<'a> {
-    activity: Activity,
-    main: &'a RawFd,
+    pub activity: Activity,
+    pub main: &'a RawFd,
 }
 
 impl<'a> Ui<'a> {
@@ -262,9 +264,5 @@ impl<'a> Ui<'a> {
         parent: Option<&dyn View>,
     ) -> HorizontalScrollView {
         self.horizontal_scroll_view(parent, false, false, false)
-    }
-
-    pub fn finish(&self) {
-        self.activity.finish(self.main);
     }
 }

@@ -3,11 +3,8 @@ use rand::{
     thread_rng,
 };
 
-use nix::cmsg_space;
-
 use nix::sys::socket::{
-    accept, bind, listen, recv, recvmsg, send, socket, AddressFamily, MsgFlags, RecvMsg, SockFlag,
-    SockType, SockaddrStorage, UnixAddr,
+    accept, bind, listen, recv, send, socket, AddressFamily, MsgFlags, SockFlag, SockType, UnixAddr,
 };
 
 use nix::errno::Errno;
@@ -134,36 +131,6 @@ pub fn recv_msg(fd: &RawFd) -> Value {
     match serde_json::from_slice(&msg) {
         Ok(val) => val,
         Err(_) => json!(null),
-    }
-}
-
-pub fn recv_msg_fd(fd: &RawFd) -> (Value, u8) {
-    let mut size = [0u8; 4];
-    let mut togo = 4usize;
-    let mut start = 0;
-
-    while togo > 0 {
-        let ret = recv(*fd, &mut size[start..], MsgFlags::empty()).unwrap();
-        togo = togo.saturating_sub(ret);
-        start += ret;
-    }
-
-    togo = u32::from_be_bytes(size) as usize;
-    let mut msg = [0u8; 1024 * 64];
-    let mut fds = cmsg_space!([RawFd; 2]);
-    while togo > 0 {
-        let mut io_mut_buff = [std::io::IoSliceMut::new(&mut msg[start..])];
-        let ret: RecvMsg<SockaddrStorage> =
-            recvmsg(*fd, &mut io_mut_buff, Some(&mut fds), MsgFlags::empty()).unwrap();
-        let ret = ret.bytes;
-        togo = togo.saturating_sub(ret);
-        start += ret;
-    }
-
-    let msg: Vec<u8> = msg.iter().map(|&v| v).filter(|&val| val != b'\0').collect();
-    match serde_json::from_slice(&msg) {
-        Ok(val) => (val, fds[0]),
-        Err(_) => (json!(null), fds[0]),
     }
 }
 

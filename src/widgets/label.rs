@@ -61,8 +61,10 @@ pub trait TextView: View {
             "id": self.get_id()
         });
 
-        self.send_recv_msg(construct_message("getText", &args))
-            .to_string()
+        let ret = self.send_recv_msg(construct_message("getText", &args)).to_string();
+        let ret = ret.as_bytes();
+        let ret: Vec<u8> = ret.iter().map(|&val| {val}).filter(|&val| {val != b'\"'}).collect();
+        String::from_utf8(ret).unwrap()
     }
 
     fn set_text_color(&self, color: Color) {

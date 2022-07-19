@@ -1,9 +1,11 @@
 use serde_json::json;
 use std::os::unix::io::RawFd;
+use std::process::{Command, Stdio};
 
 mod connection;
 
 pub mod activity;
+pub mod buffer;
 pub mod event;
 pub mod layouts;
 pub mod ui;
@@ -69,5 +71,14 @@ impl TGui {
         .to_string()
         .parse()
         .unwrap()
+    }
+
+    pub fn to_termux(&self) {
+        Command::new("am")
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .args(["start", "-n", "com.termux/.app.TermuxActivity"])
+            .output()
+            .unwrap();
     }
 }

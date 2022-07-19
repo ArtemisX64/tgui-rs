@@ -26,7 +26,7 @@ fn main() {
             std::process::exit(0);
         }
         if event.ty == tgui::event::CLICK && event.id == switch.get_id() {
-            ui.finish();
+            ui.activity.finish(ui.main);
         }
     }
 }

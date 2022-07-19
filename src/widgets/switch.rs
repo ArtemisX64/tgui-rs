@@ -32,7 +32,6 @@ impl<'a> Switch<'a> {
             check,
         }
     }
-
 }
 
 impl<'a> TextView for Switch<'a> {}
