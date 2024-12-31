@@ -3,6 +3,7 @@ pub struct Vec2<T: Sized> {
     pub y: T,
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct Color {
     pub a: u8,
     pub r: u8,
